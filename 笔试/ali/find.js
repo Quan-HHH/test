@@ -16,12 +16,24 @@ var data = [
 // }
 
 var find = function(origin) {
-  // coding here
-  return function where() {
-    return function orderBy() {
-      console.log(arguments)
+  Array.prototype.where = function(obj) {
+    let key = Object.keys(obj)[0],
+    value = obj[key]
+    for(let i = 0; i < this.length; i ++) {
+      if(!value.test(this[i][key])) { // 不符合 就删掉
+        this.splice(i, 1)
+        i --
+      }
     }
+    return this
   }
+  Array.prototype.orderBy = function(key, term) {
+    if(term === 'desc') {
+      this.sort((a, b) => b[key] - a[key])
+    }
+    return this
+  }
+  return origin
 }
 //查找data中，符合条件的数据，并进行排序
 var result = find(data).where({
